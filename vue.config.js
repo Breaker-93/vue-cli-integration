@@ -1,5 +1,15 @@
 const path = require("path")
 const resolve = dir => path.join(__dirname, dir)
+const addStylusResource = rule => {
+  rule
+    .use("style-resouce")
+    .loader("style-resources-loader")
+    .options({
+      patterns: [resolve("src/assets/css/variable.styl"),
+        resolve("src/assets/css/selector.styl"),
+        resolve("src/assets/css/mixin.styl")]
+    });
+};
 
 module.exports = {
   publicPath: process.env.VUE_APP_PUBLIC_PATH ,
@@ -42,5 +52,21 @@ module.exports = {
       .set("@store", resolve("src/store"))
       .set("@layouts", resolve("src/layouts"))
       .set("@static", resolve("src/static"))
-  }
+    const types = ["vue-modules", "vue", "normal-modules", "normal"]
+    types.forEach(type =>
+      addStylusResource(config.module.rule("stylus").oneOf(type))
+    )
+  },
+  css: {
+    sourceMap: false,
+    loaderOptions: {
+      stylus: {
+        // 向全局sass样式传入共享的全局变量, $src可以配置图片cdn前缀
+        // 详情: https://cli.vuejs.org/guide/css.html#passing-options-to-pre-processor-loaders
+        prependData: `
+        @import "@assets/css/selector.styl";
+        `
+      }
+    }
+  },
 }
