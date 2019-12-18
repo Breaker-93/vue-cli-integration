@@ -115,6 +115,10 @@ export default {
   name: "HelloWorld",
   props: {
     msg: String
+  },
+  mounted() {
+    console.log('Hello vue-cli 4.0:', process.env.VUE_APP_API)
+    console.info('node_env:', process.env.NODE_ENV)
   }
 };
 </script>
