@@ -115,15 +115,21 @@ export default {
   name: "HelloWorld",
   props: {
     msg: String
+  },
+  mounted() {
+    console.log('Hello vue-cli 4.0:', process.env.VUE_APP_API)
+    console.info('node_env:', process.env.NODE_ENV)
   }
 };
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="stylus">
+.hello
+  background url($src+"/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=460488863,4104961966&fm=15&gp=0.jpg")
 h3
   margin 40px 0 0
-
+  color mainColor
 ul
   list-style-type none
   padding 0
