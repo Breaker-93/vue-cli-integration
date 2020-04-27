@@ -25,5 +25,5 @@ yarn-error.log*
 *.sln
 *.sw?
 
-/src/**/test/
-/src/router/test.js
+# /src/**/test/
+# /src/router/test.js
