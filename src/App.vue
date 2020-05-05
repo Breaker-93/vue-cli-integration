@@ -1,7 +1,13 @@
 <template>
   <div id="app">
-    <router-view />
+    <transition name="page">
+      <router-view />
+    </transition>
   </div>
 </template>
 
-<style lang="stylus"></style>
+<style lang="stylus">
+  html, body, #app {
+    height 100%
+  }
+</style>

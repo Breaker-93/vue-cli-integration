@@ -1,5 +1,8 @@
 # vue-cli 4.0 integration
-> 基础配置 + axios配置(拦截处理) + router配置（拦截处理）
+> 基础配置 + axios配置(拦截处理) + router配置（拦截处理） 
+> \+  基础权限管理模块（登录授权、用户、角色、组/部门、用户与角色、用户与部门、角色与权限、操作日志）
+
+> 后端接口服务：https://github.com/Breaker-93/spring-server-integration/tree/feat-base-auth
 ## 基础配置
 ### 配置多环境变量
 #### 1、创建变量文件

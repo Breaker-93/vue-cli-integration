@@ -3,7 +3,9 @@
  */
 import axios from 'axios'
 import Qs from 'qs'
-import { getToken, removeToken } from '@assets/js/auth'
+import { Message, MessageBox } from 'element-ui'
+import store from '@/store'
+import { getToken } from '@assets/js/auth'
 // 创建axios实例
 const xhr = axios.create({
   baseURL: process.env.VUE_APP_API, // api 的 base_url
@@ -26,7 +28,7 @@ xhr.interceptors.request.use(
     //  3.对特殊请求的参数进行特殊处理
     let token = getToken()
     if (token) {
-      config.headers['Authorization'] = 'Bearer ' + token
+      config.headers['Authentication'] = 'Bearer ' + token
     }
     return config
   },
@@ -48,11 +50,29 @@ xhr.interceptors.response.use(
 
       // 登录权限过期处理（溢出token,页面重定向）
       if (res.data.code === '402') {
-        removeToken()
-        location.reload() // 为了重新实例化vue-router对象 避免bug, 路由导航时验证权限并重定向至登录页
+        MessageBox.confirm(
+          '你已被登出，可以取消继续留在该页面，或者重新登录',
+          '确定登出',
+          {
+            confirmButtonText: '重新登录',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }
+        ).then(() => {
+          store.dispatch('FedLogOut').then(() => {
+            location.reload() // 为了重新实例化vue-router对象 避免bug
+          })
+        })
+        // removeToken()
+        // location.reload() // 为了重新实例化vue-router对象 避免bug, 路由导航时验证权限并重定向至登录页
       }
       // 其他异常，直接弹出提示
       else {
+        Message({
+          message: res.data.data || res.data.msg,
+          type: 'error',
+          duration: 5 * 1000
+        })
         console.log(res.data.msg)
       }
       return Promise.reject(res.data)
@@ -62,6 +82,11 @@ xhr.interceptors.response.use(
   },
   error => {
     console.log('err' + error)
+    Message({
+      message: error,
+      type: 'error',
+      duration: 5 * 1000
+    })
     return Promise.reject(error)
   }
 )
