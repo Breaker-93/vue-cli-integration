@@ -47,6 +47,7 @@ module.exports = {
       .set("@assets", resolve("src/assets"))
       .set("@comp", resolve("src/components"))
       .set("@plugins", resolve("src/plugins"))
+      .set("@utils", resolve("src/utils"))
       .set("@views", resolve("src/views"))
       .set("@router", resolve("src/router"))
       .set("@store", resolve("src/store"))
@@ -56,6 +57,19 @@ module.exports = {
     types.forEach(type =>
       addStylusResource(config.module.rule("stylus").oneOf(type))
     )
+    config.module.rule('svg').uses.clear()
+    config.module
+      .rule('svg1')
+      .test(/\.svg$/)
+      .use('svg-sprite')
+        .loader('svg-sprite-loader')
+        .options({
+          symbolId: 'icon-[name]'
+        })
+        .end()
+      .include
+        .add(resolve('src/assets/icons'))
+        .end()
   },
   css: {
     sourceMap: false,
