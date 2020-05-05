@@ -39,6 +39,10 @@ export default {
   &:hover {
     background: rgba(0,0,0,.025);
   }
+  svg {
+    position relative
+    top 3px
+  }
 }
 .hamburger {
   display: inline-block;

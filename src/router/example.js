@@ -5,6 +5,7 @@ var demoRoutes = [
     path: "/demo1",
     name: "demo1",
     component: demo1,
+    hidden: true
   }
 ];
 
