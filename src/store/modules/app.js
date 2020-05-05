@@ -3,13 +3,14 @@ import { getSidebarStatus, setSidebarStatus} from '@assets/js/auth'
 const app = {
   state: {
     sidebar: {
-      opened: !+getSidebarStatus(),
+      opened: !+getSidebarStatus(), // '0'为true
       withoutAnimation: false
     },
     device: 'desktop'
   },
   mutations: {
     TOGGLE_SIDEBAR: state => {
+      console.log('TOGGLE_SIDEBAR', !+getSidebarStatus())
       if (state.sidebar.opened) {
         setSidebarStatus(1)
       } else {
