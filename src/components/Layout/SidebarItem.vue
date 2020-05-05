@@ -100,7 +100,7 @@ export default {
     }
 
     .svg-icon {
-      margin-right: 16px;
+      margin-right: 12px;
     }
   }
 </style>

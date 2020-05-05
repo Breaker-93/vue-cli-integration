@@ -93,12 +93,31 @@ export default {
       color rgb(236, 240, 241)
     }
     .el-menu {
-      border-right none
+      border: none;
+      &.el-menu--collapse {
+        .el-submenu__title{
+          >span, >.el-submenu__icon-arrow {
+            display none
+          }
+        }
+      }
     }
     scrollBar()
     overflow-x hidden
     background menuBg
     color menuText
+    .nest-menu {
+      height 50px
+    }
+    .nest-menu .el-submenu>.el-submenu__title,
+    .nest-menu,
+    .el-submenu .el-menu-item {
+      background-color: subMenuBg !important;
+
+      &:hover {
+        background-color: subMenuHover !important;
+      }
+    }
   }
   .el-main {
     height 1200px

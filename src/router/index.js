@@ -24,6 +24,39 @@ let routes = [
     }]
   },
   {
+    path: '/systemConfig',
+    component: Layout,
+    redirect: '/systemConfig/access',
+    name: 'System',
+    meta: { title: '系统配置', icon: 'system-set' },
+    children: [
+      {
+        path: 'access',
+        component: () => import('@/views/system/access'),
+        name: 'access',
+        meta: { title: '权限管理', icon: 'system-set' }
+      },
+      {
+        path: 'role',
+        component: () => import('@/views/system/role'),
+        name: 'role',
+        meta: { title: '角色管理' }
+      },
+      {
+        path: 'group',
+        component: () => import('@/views/system/group'),
+        name: 'group',
+        meta: { title: '组管理' }
+      },
+      {
+        path: 'user',
+        component: () => import('@/views/system/user'),
+        name: 'user',
+        meta: { title: '用户管理' }
+      }
+    ]
+  },
+  {
     path: '/form',
     component: Layout,
     children: [
