@@ -6,4 +6,3 @@ export function login(username, password) {
     password
   })
 }
-

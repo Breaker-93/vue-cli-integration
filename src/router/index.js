@@ -34,7 +34,7 @@ let routes = [
         path: 'access',
         component: () => import('@/views/system/access'),
         name: 'access',
-        meta: { title: '权限管理', icon: 'system-set' }
+        meta: { title: '权限管理' }
       },
       {
         path: 'role',
