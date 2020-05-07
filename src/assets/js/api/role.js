@@ -1,24 +1,24 @@
 import xhr from '@utils/http'
 
 export function getRolesByPage(page, size, keyword) {
-  return xhr.get('/sys/sys-access/page', {
+  return xhr.get('/sys/sys-role/page', {
     page,
     size,
     keyword
   })
 }
 
-export function addRole(name, code, sort, remarks) {
-  return xhr.post('/sys/sys-access', {
+export function addRole(name, code, accesses, remarks) {
+  return xhr.post('/sys/sys-role/withAccess', {
     name,
     code,
-    sort,
+    accesses,
     remarks
   })
 }
 
 export function editRole(id, name, code, sort, remarks) {
-  return xhr.put('/sys/sys-access/' + id, {
+  return xhr.put('/sys/sys-role/' + id, {
     name,
     code,
     sort,
@@ -27,6 +27,6 @@ export function editRole(id, name, code, sort, remarks) {
 }
 
 export function deleteRole(id) {
-  return xhr.delete('/sys/sys-access/' + id, {})
+  return xhr.delete('/sys/sys-role/' + id, {})
 }
 
