@@ -28,7 +28,21 @@
       </el-table-column>
       <el-table-column align="center" prop="name" label="角色名称" />
       <el-table-column align="center" prop="code" label="角色编码" />
-      <el-table-column align="center" prop="accesses" label="拥有权限" />
+      <el-table-column align="center" prop="accessList" label="拥有权限">
+        <template slot-scope="scope">
+          <div v-if="judgeArray(scope.row.accessList)">
+            <el-tag
+              v-for="(access, index) in scope.row.accessList"
+              :key="index"
+            >
+              {{ access.name }}
+            </el-tag>
+          </div>
+          <div class="empty-tip" v-else>
+            (空)
+          </div>
+        </template>
+      </el-table-column>
       <el-table-column align="center" prop="remarks" label="备注说明" />
       <el-table-column align="center" prop="createTime" label="创建日期" />
       <el-table-column align="center" prop="createBy" label="创建人" />
@@ -86,9 +100,9 @@
             maxlength="50"
           ></el-input>
         </el-form-item>
-        <el-form-item label="选择权限" prop="accesses">
+        <el-form-item label="选择权限" prop="accessList">
           <el-select
-            v-model="addForm.accesses"
+            v-model="addForm.accessList"
             multiple
             filterable
             placeholder="请为角色设置权限"
@@ -145,7 +159,7 @@ export default {
       addForm: {
         name: "",
         code: "",
-        accesses: "",
+        accessList: [],
         remarks: "",
       },
       roleFormRules: {
@@ -221,7 +235,7 @@ export default {
     },
     getAccesses() {
       getAccessesAll().then((res) => {
-        console.log("accesses", res);
+        console.log("accessList", res);
         if (res.data) {
           this.accessList = res.data;
         } else {
@@ -237,12 +251,18 @@ export default {
       this.clearForm();
       this.addFormDialog = true;
       if (row) {
-        console.log(row);
+        console.log("edit", row);
+        let accessArry = [];
+        if (this.judgeArray(row.accessList)) {
+          row.accessList.forEach((access) => {
+            accessArry.push(access.businessId);
+          });
+        }
         this.addForm = {
           id: row.businessId,
           name: row.name,
           code: row.code,
-          sort: row.sort,
+          accessList: accessArry,
           remarks: row.remarks,
         };
       }
@@ -257,11 +277,11 @@ export default {
     toAdd() {
       this.$refs.roleForm.validate((valid) => {
         if (valid) {
-          console.log(this.addForm)
+          console.log(this.addForm);
           addRole(
             this.addForm.name,
             this.addForm.code,
-            this.addForm.accesses,
+            this.addForm.accessList,
             this.addForm.remarks.trim() === ""
               ? undefined
               : this.addForm.remarks
@@ -285,7 +305,7 @@ export default {
       this.addForm = {
         name: "",
         code: "",
-        accesses: [],
+        accessList: [],
         remarks: "",
       };
     },
@@ -297,7 +317,7 @@ export default {
             this.addForm.id,
             this.addForm.name,
             this.addForm.code,
-            this.addForm.accesses,
+            this.addForm.accessList,
             this.addForm.remarks.trim() === ""
               ? undefined
               : this.addForm.remarks
@@ -343,6 +363,9 @@ export default {
       this.tableData = [];
       this.searchByPage();
     },
+    judgeArray(arry) {
+      return arry instanceof Array && arry.length > 0;
+    },
   },
   computed: {},
   watch: {},
@@ -353,6 +376,9 @@ export default {
   searchParam()
   .table-pagination {
     text-align center
+  }
+  .empty-tip{
+    color #ccc
   }
 }
 </style>

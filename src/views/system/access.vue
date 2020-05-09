@@ -116,7 +116,7 @@
   </section>
 </template>
 <script>
-import { getRolesByPage, addRole, editRole, deleteRole } from "@assets/js/api/role";
+import { getAccessesByPage, addAccess, editAccess, deleteAccess } from "@assets/js/api/access";
 export default {
   name: "access",
   components: {},
@@ -181,7 +181,7 @@ export default {
   methods: {
     searchByPage() {
       this.tableLoading = true
-      getRolesByPage(this.currentPage, this.pageSize, this.search.keyword).then(
+      getAccessesByPage(this.currentPage, this.pageSize, this.search.keyword).then(
         (res) => {
           console.log(res);
           if (res.code === "200") {
@@ -233,7 +233,7 @@ export default {
     toAdd() {
       this.$refs.accessForm.validate((valid) => {
         if (valid) {
-          addRole(
+          addAccess(
             this.addForm.name,
             this.addForm.code,
             this.addForm.sort,
@@ -268,7 +268,7 @@ export default {
       this.$refs.accessForm.validate((valid) => {
         if (valid) {
           console.log("edit:", this.addForm);
-          editRole(
+          editAccess(
             this.addForm.id,
             this.addForm.name,
             this.addForm.code,
@@ -298,7 +298,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        deleteRole(row.businessId).then( res => {
+        deleteAccess(row.businessId).then( res => {
           if (res.code === "200") {
             this.$message.success("权限删除成功");
             this.refreshSearch();
