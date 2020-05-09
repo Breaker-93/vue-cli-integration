@@ -22,11 +22,11 @@ exports.put = function (api, data) {
     data
   })
 }
-exports.delete = function (api, param) {
+exports.delete = function (api, params) {
   return xhr({
     url: api,
     method: 'delete',
-    param
+    params
   })
 }
 
