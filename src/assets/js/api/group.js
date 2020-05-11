@@ -1,5 +1,11 @@
 import xhr from '@utils/http'
 
+export function getGroupsAll(keyword) {
+  return xhr.get('/sys/sys-group', {
+    keyword
+  })
+}
+
 export function getGroupsByPage(page, size, keyword) {
   return xhr.get('/sys/sys-group/page', {
     page,

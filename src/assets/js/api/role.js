@@ -1,5 +1,11 @@
 import xhr from '@utils/http'
 
+export function getRolesAll(keyword) {
+  return xhr.get('/sys/sys-role', {
+    keyword
+  })
+}
+
 export function getRolesByPage(page, size, keyword) {
   return xhr.get('/sys/sys-role/withAccess/page', {
     page,
