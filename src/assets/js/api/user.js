@@ -9,7 +9,7 @@ export function login(username, password) {
 
 
 export function getUsersByPage(page, size, keyword, roleId, groupId) {
-  return xhr.get('/sys/sys-user/withAccessAndGroup/page', {
+  return xhr.get('/sys/sys-user/withRoleAndGroup/page', {
     page,
     size,
     keyword,
@@ -30,12 +30,12 @@ export function addUser(username, password, roleList, groupList, detailInfo) {
   })
 }
 
-export function editUser(id, name, code, sort, remarks) {
-  return xhr.put('/sys/sys-user/' + id, {
-    name,
-    code,
-    sort,
-    remarks
+export function editUser(id, username, password, roleList, groupList) {
+  return xhr.put('/sys/sys-user/withRoleAndGroup/' + id, {
+    username,
+    password,
+    roleList,
+    groupList
   })
 }
 

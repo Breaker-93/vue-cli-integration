@@ -44,9 +44,9 @@
         </template>
       </el-table-column>
       <el-table-column align="center" prop="remarks" label="备注说明" />
-      <el-table-column align="center" prop="createTime" label="创建日期" />
+      <el-table-column align="center" prop="createTime" label="创建时间" />
       <el-table-column align="center" prop="createBy" label="创建人" />
-      <el-table-column align="center" prop="updateTime" label="修改日期" />
+      <el-table-column align="center" prop="updateTime" label="修改时间" />
       <el-table-column align="center" prop="updateBy" label="修改人" />
       <el-table-column fixed="right" align="center" label="操作" width="300">
         <template slot-scope="scope">

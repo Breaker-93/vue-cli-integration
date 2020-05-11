@@ -3,15 +3,49 @@
     <!-- 表格搜索条件及操作按钮 -->
     <div class="search-param">
       <div class="item">
-        <el-input v-model="search.keyword" placeholder="输入名称和编码的关键字">
-          <el-button
-            slot="append"
-            icon="el-icon-search"
-            @click="keywordChange"
-          ></el-button>
-        </el-input>
+        <label>所属组：</label>
+        <el-select
+          v-model="search.groupId"
+          @change="changeEvent()"
+          placeholder="选择所属组"
+          filterable
+          clearable
+        >
+          <el-option
+            v-for="item in groupList"
+            :key="item.id"
+            :label="item.name"
+            :value="item.businessId"
+          >
+          </el-option>
+        </el-select>
       </div>
       <div class="item">
+        <label>所属角色：</label>
+        <el-select
+          v-model="search.roleId"
+          @change="changeEvent()"
+          placeholder="选择所属角色"
+          filterable
+          clearable
+        >
+          <el-option
+            v-for="item in roleList"
+            :key="item.id"
+            :label="item.name"
+            :value="item.businessId"
+          >
+          </el-option>
+        </el-select>
+      </div>
+      <div class="item">
+        <el-input
+          v-model="search.keyword"
+          placeholder="输入用户名或昵称的关键字"
+        >
+        <el-button slot="append" icon="el-icon-search" @click="keywordChange"></el-button>
+        </el-input>
+        
         <el-button @click="showDialog('add')">添加</el-button>
       </div>
     </div>
@@ -30,10 +64,7 @@
       <el-table-column align="center" prop="groupList" label="所属组">
         <template slot-scope="scope">
           <div v-if="judgeArray(scope.row.groupList)">
-            <el-tag
-              v-for="(group, index) in scope.row.groupList"
-              :key="index"
-            >
+            <el-tag v-for="(group, index) in scope.row.groupList" :key="index">
               {{ group.name }}
             </el-tag>
           </div>
@@ -45,10 +76,7 @@
       <el-table-column align="center" prop="roleList" label="拥有角色">
         <template slot-scope="scope">
           <div v-if="judgeArray(scope.row.roleList)">
-            <el-tag
-              v-for="(role, index) in scope.row.roleList"
-              :key="index"
-            >
+            <el-tag v-for="(role, index) in scope.row.roleList" :key="index">
               {{ role.name }}
             </el-tag>
           </div>
@@ -57,9 +85,9 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column align="center" prop="createTime" label="创建日期" />
+      <el-table-column align="center" prop="createTime" label="创建时间" />
       <el-table-column align="center" prop="createBy" label="创建人" />
-      <el-table-column align="center" prop="updateTime" label="修改日期" />
+      <el-table-column align="center" prop="updateTime" label="修改时间" />
       <el-table-column align="center" prop="updateBy" label="修改人" />
       <el-table-column fixed="right" align="center" label="操作" width="300">
         <template slot-scope="scope">
@@ -183,8 +211,7 @@ export default {
         password: "",
         roleList: [],
         groupList: [],
-        detailInfo: {
-        }
+        detailInfo: {},
       },
       userFormRules: {
         username: [
@@ -213,17 +240,32 @@ export default {
       },
       tableLoading: false,
       roleList: [],
-      groupList: []
+      groupList: [],
     };
   },
   created() {
+    if (this.roleList.length === 0) {
+      this.getRoles();
+    }
+    if (this.groupList.length === 0) {
+      this.getGroups();
+    }
     this.searchByPage();
   },
   mounted() {},
   methods: {
+    changeEvent() {
+      this.searchByPage()
+    },
     searchByPage() {
       this.tableLoading = true;
-      getUsersByPage(this.currentPage, this.pageSize, this.search.keyword)
+      getUsersByPage(
+        this.currentPage,
+        this.pageSize,
+        this.search.keyword,
+        this.search.roleId,
+        this.search.groupId
+      )
         .then((res) => {
           console.log(res);
           if (res.code === "200") {
@@ -271,12 +313,6 @@ export default {
       });
     },
     showDialog(type, row) {
-      if (this.roleList.length === 0) {
-        this.getRoles();
-      }
-      if (this.groupList.length === 0) {
-        this.getGroups();
-      }
       this.addOrEdit = type;
       this.clearForm();
       this.addFormDialog = true;
@@ -297,6 +333,7 @@ export default {
         this.addForm = {
           id: row.userId,
           username: row.username,
+          password: "",
           roleList: roleArry,
           groupList: groupArry,
         };
@@ -310,8 +347,8 @@ export default {
       }
     },
     toAdd() {
-      if(this.addForm.password === '') {
-        this.addForm.password = '123456'
+      if (this.addForm.password === "") {
+        this.addForm.password = "123456";
       }
       this.$refs.userForm.validate((valid) => {
         if (valid) {
@@ -344,11 +381,13 @@ export default {
         password: "",
         roleList: [],
         groupList: [],
-        detailInfo: {
-        }
+        detailInfo: {},
       };
     },
     toEdit() {
+      if (this.addForm.password === "") {
+        this.addForm.password = "123456";
+      }
       this.$refs.userForm.validate((valid) => {
         if (valid) {
           console.log("edit:", this.addForm);
