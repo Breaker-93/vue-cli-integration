@@ -13,8 +13,12 @@ export default {
   computed: {
     ...mapGetters([
       'name',
-      'roles'
+      'roles',
+      'authorities'
     ])
+  },
+  created() {
+    console.log('用户权限：', this.authorities)
   }
 }
 </script>

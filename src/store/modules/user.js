@@ -4,6 +4,7 @@ import { getToken, setToken, removeToken } from '@assets/js/auth'
 const user = {
   state: {
     token: getToken(),
+    authorities: [],
     name: '',
     avatar: '',
     roles: []
@@ -21,6 +22,12 @@ const user = {
     },
     SET_ROLES: (state, roles) => {
       state.roles = roles
+    },
+    SET_AUTH: (state, authorities) => {
+      if(authorities) {
+        authorities = authorities.split(",")
+        state.authorities = authorities
+      }
     }
   },
 
@@ -33,6 +40,7 @@ const user = {
           const data = response.data
           setToken(data.Authentication)
           commit('SET_TOKEN', data.Authentication)
+          commit('SET_AUTH', data.authorities)
           resolve()
         }).catch(error => {
           reject(error)
