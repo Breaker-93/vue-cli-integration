@@ -4,6 +4,7 @@
 import axios from 'axios'
 import Qs from 'qs'
 import { Message, MessageBox } from 'element-ui'
+import { Toast } from 'vant'
 import store from '@/store'
 import { getToken } from '@assets/js/auth'
 // 创建axios实例
@@ -68,12 +69,12 @@ xhr.interceptors.response.use(
       }
       // 其他异常，直接弹出提示
       else {
-        Message({
-          message: res.data.data || res.data.msg,
-          type: 'error',
-          duration: 5 * 1000
-        })
-        console.log(res.data.msg)
+        // Message({
+        //   message: res.data.data || res.data.msg,
+        //   type: 'error',
+        //   duration: 5 * 1000
+        // })
+        Toast({type: 'fail', message: res.data.data || res.data.msg, duration: 3000});
       }
       return Promise.reject(res.data)
     } else {

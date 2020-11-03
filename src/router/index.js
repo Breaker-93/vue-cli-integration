@@ -6,7 +6,8 @@ import demoRoutes from "./example";
 import Login from "../views/Login.vue"
 import NotFound from "../views/404"
 import Layout from '@comp/Layout'
-import dashboard from '@/views/dashboard/index'
+
+import home from '@/views/Home'
 
 Vue.use(VueRouter);
 
@@ -14,34 +15,18 @@ let routes = [
   {
     path: '/',
     component: Layout,
-    redirect: '/dashboard',
-    name: 'dashboard',
-    meta: { title: '首页' },
+    redirect: '/home',
+    name: 'home',
     hidden: true,
-    children: [{
-      path: 'dashboard',
-      component: dashboard
-    }]
-  },
-  {
-    path: '/form',
-    component: Layout,
     children: [
       {
-        path: 'index',
-        name: 'Form',
-        component: () => import('@/views/form/index'),
-        meta: { title: 'Form', icon: 'form' }
-      }
-    ]
-  },
-  {
-    path: 'external-link',
-    component: Layout,
-    children: [
+        path: 'home',
+        component: home
+      },
       {
-        path: 'https://panjiachen.github.io/vue-element-admin-site/#/',
-        meta: { title: 'External Link', icon: 'link' }
+        path: 'my',
+        name: 'my',
+        component: () => import('@/views/my/index')
       }
     ]
   },

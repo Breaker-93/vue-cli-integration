@@ -1,98 +1,84 @@
 <template>
   <section class="login">
-    <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" auto-complete="on" label-position="left">
-      <h3 class="title">LOGIN</h3>
-      <el-form-item prop="username">
-        <span class="svg-container">
-          <svg-icon icon-class="user" />
-        </span>
-        <el-input v-model="loginForm.username" name="username" type="text" auto-complete="on" placeholder="username" />
-      </el-form-item>
-      <el-form-item prop="password">
-        <span class="svg-container">
-          <svg-icon icon-class="password" />
-        </span>
-        <el-input
-          :type="pwdType"
-          v-model="loginForm.password"
-          name="password"
-          auto-complete="on"
-          placeholder="password"
-          @keyup.enter.native="handleLogin" />
-        <span class="show-pwd" @click="showPwd">
-          <svg-icon :icon-class="pwdType === 'password' ? 'eye' : 'eye-open'" />
-        </span>
-      </el-form-item>
-      <el-form-item>
-        <el-button :loading="loading" type="primary" style="width:100%;" @click.native.prevent="toLogin">
-          Sign in
-        </el-button>
-      </el-form-item>
-    </el-form>
+    <van-form
+      :show-error-message="false"
+      class="login-form" @submit="toLogin">
+      <h1>生产管理系统</h1>
+      <van-field
+        v-model="username"
+        name="username"
+        left-icon="user-o"
+        clearable
+        placeholder="请输入用户名"
+        :rules="[{ required: true, message: '请填写用户名' }]"
+      />
+      <van-field
+        v-model="password"
+        name="password"
+        :type="showPwd ? 'text' : 'password'"
+        clearable
+        left-icon="smile-o"
+        :right-icon="showPwd ? 'eye-o' : 'closed-eye'"
+        @click-right-icon="showPwdClick"
+        placeholder="请输入密码"
+        :rules="[{ required: true, message: '请填写密码' }]"
+      />
+      <van-checkbox
+        v-model="rememberPwd"
+        class="rem-check"
+        icon-size="15px"
+        checked-color="#07c160">
+        记住密码
+      </van-checkbox>
+      <van-button round block type="default" native-type="submit">登录</van-button>
+    </van-form>
+    <div class="water w1" :style="{height: heightRate}"></div>
+    <div class="water w2" :style="{height: heightRate}"></div>
+    <div class="water" :style="{height: heightRate}"></div>
   </section>
 </template>
 <script>
+import Vue from 'vue'
+import { Button, Field, Form, Checkbox, Icon, Toast } from 'vant';
+Vue.use(Toast)
 export default {
   name: "login",
-  components: {},
+  components: {
+    VanButton: Button,
+    VanField: Field,
+    VanForm: Form,
+    VanCheckbox: Checkbox,
+    VanIcon: Icon
+  },
   props: {},
   data() {
-    const validateUsername = (rule, value, callback) => {
-      if (value.trim().length === 0) {
-        callback(new Error('用户名不能为空'))
-      } else {
-        callback()
-      }
-    }
-    const validatePass = (rule, value, callback) => {
-      if (value.length < 5) {
-        callback(new Error('密码不能小于5位'))
-      } else {
-        callback()
-      }
-    }
     return {
-      loginForm: {
-        username: 'admin',
-        password: '123456'
-      },
-      loginRules: {
-        username: [{ required: true, trigger: 'blur', validator: validateUsername }],
-        password: [{ required: true, trigger: 'blur', validator: validatePass }]
-      },
-      loading: false,
+      username: '',
+      password: '',
       pwdType: 'password',
-      redirect: undefined
+      redirect: undefined,
+      heightRate: '20%',
+      rememberPwd: false,
+      showPwd: false,
     };
   },
   created() {},
   mounted() {},
   methods: {
-    showPwd() {
-      if (this.pwdType === 'password') {
-        this.pwdType = ''
-      } else {
-        this.pwdType = 'password'
-      }
+    showPwdClick() {
+      this.showPwd = !this.showPwd
     },
     toLogin() {
-      this.$refs.loginForm.validate(valid => {
-        if (valid) {
-          this.loading = true
-          this.$store.dispatch('Login', this.loginForm).then(() => {
-            this.loading = false
-            if (this.redirect) {
-              window.location.href = this.redirect;
-            } else {
-              this.$router.push("/");
-            }
-          }).catch(() => {
-            this.loading = false
-          })
+      Toast.loading('验证中...');
+      this.$store.dispatch('Login', {username: this.username, password: this.password}).then(() => {
+        Toast.clear();
+        if (this.redirect) {
+          window.location.href = this.redirect;
         } else {
-          console.log('error submit!!')
-          return false
+          this.$router.push("/");
         }
+      }).catch(() => {
+        // Toast.clear();
       })
     },
   },
@@ -112,72 +98,53 @@ export default {
 
 /* reset element-ui css */
 .login {
-  .el-input {
-    display: inline-block;
-    height: 47px;
-    width: 85%;
-    input {
-      background: transparent;
-      border: 0px;
-      -webkit-appearance: none;
-      border-radius: 0px;
-      padding: 12px 5px 12px 15px;
-      color: light_gray;
-      height: 47px;
-      &:-webkit-autofill {
-        -webkit-box-shadow: 0 0 0px 1000px bg inset !important;
-        -webkit-text-fill-color: #fff !important;
-      }
-    }
-  }
-  .el-form-item {
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    background: rgba(0, 0, 0, 0.1);
-    border-radius: 5px;
-    color: #454545;
-  }
 }
 </style>
 
 <style lang="stylus" scoped>
-
 .login {
-  position: fixed;
-  height: 100%;
-  width: 100%;
-  background-color: bg;
+  position relative
+  height 100%
+  background-size cover
+
   .login-form {
-    position: absolute;
-    left: 0;
-    right: 0;
-    width: 520px;
-    max-width: 100%;
-    padding: 35px 35px 15px 35px;
-    margin: 120px auto;
+    position absolute
+    top 50%
+    transform translateY(-50%)
+    width 100%
+    padding 0 50px
+    box-sizing border-box
+    h1 {
+      margin -80px 0 80px
+      font-size 24px
+      font-family:Microsoft YaHei;
+      font-weight:400;
+      color #ffffff
+      text-align center
+    }
+    .van-cell {
+      background none
+      margin 8px 0
+      color #fff
+      &:not(:last-child)::after {
+        right 0
+        left 0
+      }
+      .van-field__control {
+        color #fff
+      }
+    }
+    .rem-check {
+      float right
+      margin 5px 0 10px
+      .van-checkbox__label {
+        font-size 12px
+        color #fff
+        line-height unset
+      }
+    }
   }
-  .svg-container {
-    padding: 6px 5px 6px 15px;
-    color: dark_gray;
-    vertical-align: middle;
-    width: 30px;
-    display: inline-block;
-  }
-  .title {
-    font-size: 26px;
-    font-weight: 400;
-    color: light_gray;
-    margin: 0px auto 40px auto;
-    text-align: center;
-    font-weight: bold;
-  }
-  .show-pwd {
-    position: absolute;
-    right: 10px;
-    top: 7px;
-    font-size: 16px;
-    color: dark_gray;
-    cursor: pointer;
-    user-select: none;
-  }
+
+ 
 }
 </style>
