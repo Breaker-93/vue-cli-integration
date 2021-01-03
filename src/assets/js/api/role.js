@@ -33,6 +33,8 @@ export function editRole(id, name, code, accessList, remarks) {
 }
 
 export function deleteRole(id) {
-  return xhr.delete('/sys/sys-role/' + id, {})
+  return xhr.delete('/sys/sys-role/' + id, {
+    logDel: 1
+  })
 }
 

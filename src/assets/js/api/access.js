@@ -33,6 +33,8 @@ export function editAccess(id, name, code, sort, remarks) {
 }
 
 export function deleteAccess(id) {
-  return xhr.delete('/sys/sys-access/' + id, {})
+  return xhr.delete('/sys/sys-access/' + id, {
+    logDel: 1
+  })
 }
 
