@@ -217,7 +217,7 @@ export default {
         username: [
           { required: true, message: "请设置用户名", trigger: "blur" },
           {
-            min: 3,
+            min: 1,
             max: 50,
             message: "请设置 3 ~ 50 个字符的用户名",
             trigger: "blur",
